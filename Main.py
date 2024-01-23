@@ -3,7 +3,6 @@ import speech_recognition as sr
 from functions import *
 from gtts import gTTS
 
-
 ASSISTANT_NAME = "джарвіс"
 
 
