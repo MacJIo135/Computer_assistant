@@ -16,6 +16,9 @@ def listen():
     try:
         print("Recognizing...")
         command = recognizer.recognize_google(audio, language="uk-UA").lower()
+        if not command.startswith(ASSISTANT_NAME):
+            return
+
         parts = command.split(ASSISTANT_NAME)
         if len(parts) > 1:
             command = parts[1].strip()
@@ -67,7 +70,7 @@ def process_command(command):
                 volume = int(parts[1])
                 change_volume(volume)
             else:
-                speak("Будь ласка, вкажіть після гучність бажаний рівень числом")
+                print("Будь ласка, вкажіть після гучність бажаний рівень числом")
         else:
             print("Не знайома команда.")
 

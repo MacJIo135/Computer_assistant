@@ -4,6 +4,10 @@ import glob
 import pywhatkit
 from pygame import mixer
 
+from ctypes import cast, POINTER
+from comtypes import CLSCTX_ALL
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+
 from Main import *
 
 
@@ -42,9 +46,12 @@ def playing_music(command):
 
 
 def change_volume(volume):
-    volume = max(0, min(volume, 100))
-    ctypes.windll.user32.SendMessageW(0xFFFF, 0x319, volume, 0x20000)
-    speak(f"Встановлено гучність на {volume}")
+    volume_level = volume/100
+    devices = AudioUtilities.GetSpeakers()
+    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+    volume_control = cast(interface, POINTER(IAudioEndpointVolume))
+    volume_control.SetMasterVolumeLevelScalar(volume_level, None)
+    speak(f"Встановлено рівень гучності {volume}")
 
 
 def hi(command):
